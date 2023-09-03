@@ -78,7 +78,22 @@ class GameState:
                     moves.append(Move((row, col), (row + 1, col + 1), self.board))
 
     def get_rook_moves(self, row, col, moves):
-        pass
+        directions = ((1, 0), (-1, 0), (0, 1), (0, -1))
+        enemy_color = "b" if self.white_to_move else "w"
+        for d in directions:
+            for i in range(1, 8):
+                end_row = row + d[0] * i
+                end_col = col + d[1] * i
+                if 0 <= end_row < 8 and 0 <= end_col < 8:
+                    end_piece = self.board[end_row][end_col]
+                    if end_piece == "--":
+                        moves.append(Move((row, col), (end_row, end_col), self.board))
+                    elif end_piece[0] == enemy_color:
+                        moves.append(Move((row, col), (end_row, end_col), self.board))
+                    else:
+                        break
+                else:
+                    break
 
     # get all possible knight moves
     def get_knight_moves(self, row, col, moves):
@@ -86,15 +101,46 @@ class GameState:
 
     # get all possible bishop moves
     def get_bishop_moves(self, row, col, moves):
-        pass
+        directions = ((-1, -1), (1, 1), (-1, 1), (1, -1))
+        enemy_color = "b" if self.white_to_move else "w"
+        for d in directions:
+            for i in range(1, 8):
+                end_row = row + d[0] * i
+                end_col = col + d[1] * i
+                if 0 <= end_row < 8 and 0 <= end_col < 8:
+                    end_piece = self.board[end_row][end_col]
+                    if end_piece == "--":
+                        moves.append(Move((row, col), (end_row, end_col), self.board))
+                    elif end_piece[0] == enemy_color:
+                        moves.append(Move((row, col), (end_row, end_col), self.board))
+                    else:
+                        break
+                else:
+                    break
 
     # get all possible queen moves
     def get_queen_moves(self, row, col, moves):
-        pass
+        self.get_rook_moves(row, col, moves)
+        self.get_bishop_moves(row, col, moves)
 
     # get all possible king moves
     def get_king_moves(self, row, col, moves):
-        pass
+        directions = ((-1, -1), (1, 1), (-1, 1), (1, -1), (1, 0), (-1, 0), (0, 1), (0, -1))
+        enemy_color = "b" if self.white_to_move else "w"
+        for d in directions:
+            end_row = row + d[0]
+            end_col = col + d[1]
+            if 0 <= end_row < 8 and 0 <= end_col < 8:
+                end_piece = self.board[end_row][end_col]
+                print(end_piece)
+                if end_piece == "--":
+                    moves.append(Move((row, col), (end_row, end_col), self.board))
+                elif end_piece[0] == enemy_color:
+                    moves.append(Move((row, col), (end_row, end_col), self.board))
+                else:
+                    break
+            else:
+                break
 
 
 class Move:
