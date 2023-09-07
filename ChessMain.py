@@ -27,7 +27,7 @@ def main():
     clock = p.time.Clock()
     screen.fill(p.Color("white"))
     gs = ChessEngine.GameState()
-    valid_moves = gs.get_valid_moves()
+    valid_moves = gs.get_valid_moves_naive()
     move_made = False  # flag variable when the move is made
 
     load_images()
@@ -50,9 +50,14 @@ def main():
                     player_clicks.append(sq_selected)  # append for both 1st and 2nd click
                 if len(player_clicks) == 2:  # after 2nd click
                     move = ChessEngine.Move(player_clicks[0], player_clicks[1], gs.board)
+                    print(move.get_chess_notations())
                     if move in valid_moves:  # only valid moves are made
                         gs.make_move(move)
                         move_made = True
+                        if gs.white_to_move:
+                            print("white's turn")
+                        else:
+                            print("black's turn")
                     sq_selected = ()  # reset user clicks
                     player_clicks = []
             # key handler
@@ -60,8 +65,9 @@ def main():
                 if e.key == p.K_z:
                     gs.undo_move()
                     move_made = True
+
         if move_made:
-            valid_moves = gs.get_valid_moves()
+            valid_moves = gs.get_valid_moves_naive()
             move_made = False
 
         clock.tick(MAX_FPS)
